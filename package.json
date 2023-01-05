@@ -16,6 +16,7 @@
     "@web3uikit/icons": "^0.2.30",
     "@web3uikit/web3": "^0.2.2",
     "alchemy-sdk": "^2.2.5",
+    "dotenv": "^16.0.3",
     "eslint-config-next": "13.0.3",
     "ethers": "^5.7.2",
     "framer-motion": "^7.6.7",

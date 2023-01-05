@@ -1,4 +1,3 @@
-import { Footer } from "../components";
 import { Hero, Stats, About, Rarities, Features } from "../sections";
 
 const Page = () => (
@@ -8,7 +7,6 @@ const Page = () => (
     <About />
     <Features />
     <Rarities />
-    <Footer />
   </div>
 );
 

@@ -8,7 +8,7 @@ import { TypingText } from "../components";
 import styles from "../styles";
 
 const Stats = () => (
-  <section className="py-12 mt-8 mx-auto w-full bg-[rgb(31,32,32)]">
+  <section className="py-12 px-3 mt-8 mx-auto w-full bg-[rgb(31,32,32)]">
     <motion.div
       variants={staggerContainer}
       initial="hidden"
@@ -22,7 +22,7 @@ const Stats = () => (
       >
         <div className="flex flex-col justify-center items-center mx-auto">
           <TypingText
-            title="&mdash; OUR NFT COLLECTION &mdash;"
+            title="&mdash; THE PRISM COLLECTION &mdash;"
             textStyles="font-geo text-pink-500 md:text-[12px] text-xs"
             delay={0.75}
           />
@@ -79,9 +79,8 @@ const Stats = () => (
 
         <p className="text-slate-300 text-center mx-10 text-[8px] md:text-[10px]">
           The Prism NFT collection utilizes Chainlink Oracles to deliver
-          randomness at the time of mint. Within our collection, using this
-          mechanism, are hidden cards with a variety of rarities ranging from
-          common (70%) to Legendary (1%). Best of luck with the minting!
+          randomness at the time of mint. NFTs vary in rarity ranging from
+          common (70%) to Legendary (1%). Best of luck and happy minting!
         </p>
         <p className="text-slate-300 text-center mx-10 text-[8px] md:text-[10px]">
           The NFTs and metadata are hosted on IPFS.

@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useWeb3Contract, useMoralis } from "react-moralis";
+import prismStakingAbi from "../constants/PrismStaking.json";
 import nftMarketplaceAbi from "../constants/NftMarketplace.json";
 import nftAbi from "../constants/IpfsNft.json";
 import Image from "next/image";
-import { Card, useNotification } from "web3uikit";
+import { useNotification } from "web3uikit";
 import { ethers } from "ethers";
 import UpdateListingModal from "./UpdateListingModal";
+import ListItemModal from "./ListItemModal";
 
 const truncateStr = (fullStr, strLen) => {
   if (fullStr.length <= strLen) return fullStr;
@@ -27,15 +29,21 @@ export default function NFTBox({
   nftAddress,
   tokenId,
   marketplaceAddress,
+  prismStakingAddress,
   seller,
+  isListed,
+  isActive,
+  toStake,
 }) {
-  const { isWeb3Enabled, account } = useMoralis();
+  const { isWeb3Enabled, account, chainId } = useMoralis();
   const [imageURI, setImageURI] = useState("");
   const [tokenName, setTokenName] = useState("");
-  const [tokenDescription, setTokenDescription] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const hideModal = () => setShowModal(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showListItemModal, setShowListItemModal] = useState(false);
+  const hideUpdateModal = () => setShowUpdateModal(false);
+  const hideListItemModal = () => setShowListItemModal(false);
   const dispatch = useNotification();
+  const { runContractFunction } = useWeb3Contract();
 
   const { runContractFunction: getTokenURI } = useWeb3Contract({
     abi: nftAbi,
@@ -57,20 +65,68 @@ export default function NFTBox({
     },
   });
 
-  const { runContractFunction: updateListing } = useWeb3Contract({
+  const { runContractFunction: cancelListing } = useWeb3Contract({
     abi: nftMarketplaceAbi,
     contractAddress: marketplaceAddress,
-    functionName: "buyItem",
-    msgValue: price,
+    functionName: "cancelListing",
     params: {
       nftAddress: nftAddress,
       tokenId: tokenId,
     },
   });
 
+  async function approveAndStake() {
+    console.log("Approvin nft contract...");
+
+    const approveOptions = {
+      abi: nftAbi,
+      contractAddress: nftAddress,
+      functionName: "approve",
+      params: {
+        to: prismStakingAddress,
+        tokenId: tokenId,
+      },
+    };
+
+    await runContractFunction({
+      params: approveOptions,
+      onSuccess: () => handleApproveStakeSuccess(tokenId),
+      onError: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
+  async function handleApproveStakeSuccess(tokenId) {
+    console.log("Ok! Now time to list");
+    const listOptions = {
+      abi: prismStakingAbi,
+      contractAddress: prismStakingAddress,
+      functionName: "stake",
+      params: {
+        tokenIds: [tokenId],
+      },
+    };
+
+    await runContractFunction({
+      params: listOptions,
+      onSuccess: handleStakeSuccess,
+      onError: (error) => console.log(error),
+    });
+  }
+
+  async function handleStakeSuccess(tx) {
+    await tx.wait(1);
+    dispatch({
+      type: "success",
+      message: "NFT staked",
+      title: "NFT staked",
+      position: "topR",
+    });
+  }
+
   async function updateUI() {
     const tokenURI = await getTokenURI();
-    console.log(`The TokenURI is ${tokenURI}`);
     // We are going to cheat a little here...
     if (tokenURI) {
       // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
@@ -80,7 +136,6 @@ export default function NFTBox({
       const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
       setImageURI(imageURIURL);
       setTokenName(tokenURIResponse.name);
-      setTokenDescription(tokenURIResponse.description);
       // We could render the Image on our sever, and just call our sever.
       // For testnets & mainnet -> use moralis server hooks
       // Have the world adopt IPFS
@@ -94,20 +149,31 @@ export default function NFTBox({
     if (isWeb3Enabled) {
       updateUI();
     }
-  }, [isWeb3Enabled]);
+  }, [isWeb3Enabled, chainId]);
 
   let isOwnedByUser = seller === account || seller === undefined;
   let formattedSellerAddress = isOwnedByUser
     ? "you"
     : truncateStr(seller || "", 15);
 
-  const handleCardClick = () => {
+  const handleButtonClick = () => {
     isOwnedByUser
-      ? setShowModal(true)
+      ? setShowUpdateModal(true)
       : buyItem({
           onError: (error) => console.log(error),
           onSuccess: () => handleBuyItemSuccess(),
         });
+  };
+
+  const handleCancelButtonClick = () => {
+    cancelListing({
+      onError: (error) => console.log(error),
+      onSuccess: () => handleCancelItemSuccess(),
+    });
+  };
+
+  const handleListButtonClick = () => {
+    setShowListItemModal(true);
   };
 
   const handleBuyItemSuccess = () => {
@@ -119,61 +185,168 @@ export default function NFTBox({
     });
   };
 
+  const handleCancelItemSuccess = () => {
+    dispatch({
+      type: "success",
+      message: "Item canceled!",
+      title: "Item canceled",
+      position: "topR",
+    });
+  };
+
   return (
     <div>
       <div>
         {imageURI ? (
           <div>
-            <UpdateListingModal
-              isVisible={showModal}
+            <ListItemModal
+              isVisible={showListItemModal}
               tokenId={tokenId}
               marketplaceAddress={marketplaceAddress}
               nftAddress={nftAddress}
-              onClose={hideModal}
+              onClose={hideListItemModal}
             />
-            <Card title={tokenName}>
-              <div className="p-2">
-                <div className="flex flex-col justify-between gap-2">
+            <UpdateListingModal
+              isVisible={showUpdateModal}
+              tokenId={tokenId}
+              marketplaceAddress={marketplaceAddress}
+              nftAddress={nftAddress}
+              onClose={hideUpdateModal}
+            />
+            <div className="rounded-lg bg-gradient-to-r from-pink-500/50 via-red-500/50 to-yellow-500/50 p-[2px]">
+              <div className="flex flex-col rounded-lg bg-[rgb(31,32,32)] mx-auto">
+                <div className="p-4 gap-2">
                   <div className="flex flex-row justify-between">
-                    <div>Prism NFT #{tokenId}</div>
+                    <h3 className="text-md font-bold text-slate-300">
+                      Prism #{tokenId}
+                    </h3>
                     {price && (
-                      <div className="font-bold">
+                      <h3 className="font-bakbak font-bold text-md text-transparent bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
                         {ethers.utils.formatUnits(price, "ether")} ETH
-                      </div>
+                      </h3>
                     )}
                   </div>
-                  <div className="italic text-sm">
-                    Owned by {formattedSellerAddress}
+                  <div className="flex flex-row justify-between">
+                    <h3 className="flex justify-start text-[9px] text-slate-300 pb-1">
+                      Owned by {formattedSellerAddress}
+                    </h3>
+                    {tokenName == "uncommon" ? (
+                      <h3 className="flex justify-start text-[10px] font-bold text-blue-300 pb-1">
+                        {tokenName}
+                      </h3>
+                    ) : tokenName == "rare" ? (
+                      <h3 className="flex justify-start text-[10px] font-bold text-purple-500 pb-1">
+                        {tokenName}
+                      </h3>
+                    ) : tokenName == "common" ? (
+                      <h3 className="flex justify-start text-[10px] font-bold text-gray-500 pb-1">
+                        {tokenName}
+                      </h3>
+                    ) : tokenName == "legendary" ? (
+                      <h3 className="flex justify-start text-[10px] text-orange-500 pb-1">
+                        {tokenName}
+                      </h3>
+                    ) : (
+                      <p></p>
+                    )}
+                  </div>
+
+                  <Image
+                    alt="pup"
+                    unoptimized={() => imageURI}
+                    src={imageURI}
+                    priority
+                    height="200"
+                    width="200"
+                    className="flex justify-center items-center mx-auto pb-2"
+                  />
+                  <div className="flex flex-row p-1 gap-2 justify-center">
+                    {isActive ? (
+                      <div hidden={!isOwnedByUser || !isListed || toStake}>
+                        <button
+                          type="button"
+                          className="flex items-center h-fit py-2 px-[15px] bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
+                          disabled={!isWeb3Enabled}
+                          onClick={handleButtonClick}
+                        >
+                          <span className="font-bold text-xs text-white">
+                            UPDATE
+                          </span>
+                        </button>
+                      </div>
+                    ) : (
+                      <div hidden={!isActive && !isListed}>
+                        <div className="py-1 text-md font-bold text-slate-300">
+                          Currently Listed
+                        </div>
+                      </div>
+                    )}
+                    <div
+                      hidden={
+                        !isOwnedByUser ||
+                        !isListed ||
+                        toStake ||
+                        (isOwnedByUser && !isActive)
+                      }
+                    >
+                      <button
+                        type="button"
+                        className="flex items-center h-fit py-2 px-[20px] bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
+                        disabled={!isWeb3Enabled}
+                        onClick={handleCancelButtonClick}
+                      >
+                        <span className="font-bold text-xs text-white">
+                          CANCEL
+                        </span>
+                      </button>
+                    </div>
+                    <div hidden={isOwnedByUser || !isListed || toStake}>
+                      <button
+                        type="button"
+                        className="flex items-center h-fit py-2 px-[20px] bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
+                        disabled={!isWeb3Enabled}
+                        onClick={handleButtonClick}
+                      >
+                        <span className="font-bold text-xs text-white">
+                          BUY
+                        </span>
+                      </button>
+                    </div>
+                    <div
+                      hidden={
+                        !isOwnedByUser ||
+                        isListed ||
+                        toStake ||
+                        (isOwnedByUser && isListed)
+                      }
+                    >
+                      <button
+                        type="button"
+                        className="flex items-center h-fit py-2 px-[20px] bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
+                        disabled={!isWeb3Enabled}
+                        onClick={handleListButtonClick}
+                      >
+                        <span className="font-bold text-xs text-white">
+                          LIST ITEM
+                        </span>
+                      </button>
+                    </div>
+                    <div hidden={!toStake || (isOwnedByUser && isListed)}>
+                      <button
+                        type="button"
+                        className="flex items-center h-fit py-2 px-[20px] bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
+                        disabled={!isWeb3Enabled}
+                        onClick={approveAndStake}
+                      >
+                        <span className="font-bold text-xs text-white">
+                          STAKE
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-              <Image
-                alt="pup"
-                loader={() => imageURI}
-                src={imageURI}
-                height="200"
-                width="200"
-                className="flex justify-center items-center mx-auto"
-              />
-              <div className="flex flex-row p-2 my-1 gap-2 justify-center">
-                <button
-                  type="button"
-                  className="flex items-center h-fit py-2 px-[20px] bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
-                  disabled={!isWeb3Enabled}
-                  onClick={handleCardClick}
-                >
-                  <span className="font-bold text-xs text-white">UPDATE</span>
-                </button>
-                {isOwnedByUser && (
-                  <button
-                    type="button"
-                    className="flex items-center h-fit py-2 px-[20px] bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
-                  >
-                    <span className="font-bold text-xs text-white">CANCEL</span>
-                  </button>
-                )}
-              </div>
-            </Card>
+            </div>
           </div>
         ) : (
           <div>Loading...</div>

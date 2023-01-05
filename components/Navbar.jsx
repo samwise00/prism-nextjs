@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 
 import styles from "../styles";
 import { navVariants } from "../utils/motion";
-import { ConnectWallet } from "@thirdweb-dev/react";
 import Link from "next/link";
 
 import { ConnectButton } from "web3uikit";
@@ -15,29 +14,30 @@ const Navbar = () => (
       variants={navVariants}
       initial="hidden"
       whileInView="show"
-      className={`${styles.xPaddings} py-8 relative`}
+      className={`${styles.xPaddings} py-6 relative`}
     >
       <div
-        className={`${styles.innerWidth} mx-auto flex justify-between md:gap-16 gap-6`}
+        className={`${styles.innerWidth} mx-auto flex justify-between md:gap-16 gap-4`}
+        id="navbar"
       >
         <Link legacyBehavior href="/">
-          <h2 className="font-geo font-extrabold mt-3 md:text-[30px] text-[24px] leading-[30.24px] text-white">
+          <h2 className="font-geo font-extrabold py-2 md:text-[30px] text-[24px] leading-[30.24px] text-white cursor-pointer">
             Prism<span className="text-pink-500">.</span>
           </h2>
         </Link>
         <div className="text-white flex flex-row">
-          <div className="flex md:flex-row gap-6">
-            <div className="text-white flex flex-row gap-6 mt-4">
+          <div className="flex md:flex-row gap-2">
+            <div className="text-white flex flex-row md:gap-6 gap-2 mt-4">
               <Link legacyBehavior href="/trade">
-                <h3 className="text-xs">Trade</h3>
+                <h3 className="text-xs cursor-pointer">Trade</h3>
               </Link>
               <Link legacyBehavior href="/stake">
-                <h3 className="text-xs">Stake</h3>
+                <h3 className="text-xs cursor-pointer">Stake</h3>
               </Link>
             </div>
-            <div className="flex justify-start items-center mx-auto mb-4">
-              <ConnectButton className="z-20" />
-            </div>
+          </div>
+          <div className="flex justify-start items-center mx-auto mb-4">
+            <ConnectButton className="z-20" />
           </div>
         </div>
       </div>

@@ -32,16 +32,15 @@ const Stats = () => (
           What is $PRISM?
         </div>
         <p className="text-slate-300 text-center mx-10 text-[8px] md:text-[10px]">
-          We are building what's next. $PRISM is a decentralized protocol
-          providing trading and staking opportunities on the Polygon Blockchain.
-          PRISM NFT is our genesis collection and the entry way into our
-          ecoystem. Owning a PRISM NFT will allow users early access to all
-          future $PRISM protocol offerings, including staking for earning $PRISM
-          available on launch. $PRISM is our ERC20 governance token.
+          $PRISM is a decentralized protocol providing marketplace NFT trading
+          and NFT staking in order to earn yield in the form of $PRISM tokens.
         </p>
         <p className="text-slate-300 text-center mx-10 text-[8px] md:text-[10px]">
-          This is also a portfolio and showcase project and you should
-          definitely only purchase PRISM NFTs or $PRISM for fun. Hooray!
+          This is also purely a portfolio project. Prism utilizes four smart
+          contracts (marketplace, erc20token, staking, erc721 NFT collection) as
+          well as a Next.js + TailwindCSS front end, and indexing for the
+          marketplace using TheGraph in order to achieve this presentation. All
+          contracts are deployed on Goerli testnet.
         </p>
       </motion.div>
     </motion.div>

@@ -1,37 +1,34 @@
 import "../styles/globals.css";
 import { MoralisProvider } from "react-moralis";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import Head from "next/head";
 import { NotificationProvider } from "web3uikit";
-import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
 
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: "https://api.studio.thegraph.com/query/38206/prism/v0.0.3",
+  uri: process.env.THEGRAPH_URL,
 });
-
-const activeChainId = ChainId.Goerli;
 
 export default function App({ Component, pageProps }) {
   return (
-    <div>
+    <div className="bg-black overflow-hidden">
       <Head>
-        <title>Create Next App</title>
+        <title>Prism NFTs</title>
         <meta name="description" content="NFT Marketplace"></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <ThirdwebProvider desiredChainId={activeChainId}>
-        <MoralisProvider initializeOnMount={false}>
-          <ApolloProvider client={client}>
-            <NotificationProvider>
-              <Navbar className="z-10" />
-              <Component className="z-1" {...pageProps} />
-            </NotificationProvider>
-          </ApolloProvider>
-        </MoralisProvider>
-      </ThirdwebProvider>
+      <MoralisProvider initializeOnMount={false}>
+        <ApolloProvider client={client}>
+          <NotificationProvider>
+            <Navbar className="z-10" />
+            <Component className="z-1" {...pageProps} />
+            <Footer />
+          </NotificationProvider>
+        </ApolloProvider>
+      </MoralisProvider>
     </div>
   );
 }

@@ -2,13 +2,14 @@
 
 import { motion } from "framer-motion";
 import { fade, fadeIn, staggerContainer } from "../utils/motion";
+import Link from "next/link";
 
 import { TypingText } from "../components";
 
 import styles from "../styles";
 
 const Features = () => (
-  <section className={`${styles.yPaddings}`}>
+  <section className={`${styles.yPaddings} px-8`}>
     <motion.div
       variants={staggerContainer}
       initial="hidden"
@@ -48,12 +49,14 @@ const Features = () => (
               </p>
             </div>
             <div className="flex flex-row gap-4 mt-2">
-              <button
-                type="button"
-                className="flex items-center h-fit py-2 px-6 bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
-              >
-                <span className="font-bold text-xs text-white">MINT</span>
-              </button>
+              <Link legacyBehavior href="#navbar">
+                <button
+                  type="button"
+                  className="flex items-center h-fit py-2 px-6 bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
+                >
+                  <span className="font-bold text-xs text-white">MINT</span>
+                </button>
+              </Link>
             </div>
           </div>
         </motion.div>
@@ -71,12 +74,14 @@ const Features = () => (
               </p>
             </div>
             <div className="flex flex-row gap-4 mt-2">
-              <button
-                type="button"
-                className="flex items-center h-fit py-2 px-6 bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
-              >
-                <span className="font-bold text-xs text-white">TRADE</span>
-              </button>
+              <Link legacyBehavior href="/trade">
+                <button
+                  type="button"
+                  className="flex items-center h-fit py-2 px-6 bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
+                >
+                  <span className="font-bold text-xs text-white">TRADE</span>
+                </button>
+              </Link>
             </div>
           </div>
           <h3 className="font-bakbak font-bold text-9xl text-transparent bg-clip-text bg-gradient-to-br from-pink-400 to-red-600">
@@ -101,12 +106,14 @@ const Features = () => (
               </p>
             </div>
             <div className="flex flex-row gap-4 mt-2">
-              <button
-                type="button"
-                className="flex items-center h-fit py-2 px-6 bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
-              >
-                <span className="font-bold text-xs text-white">STAKE</span>
-              </button>
+              <Link legacyBehavior href="/stake">
+                <button
+                  type="button"
+                  className="flex items-center h-fit py-2 px-6 bg-gradient-to-r from-pink-500 to-orange-300 rounded-[32px] gap-[12px]"
+                >
+                  <span className="font-bold text-xs text-white">STAKE</span>
+                </button>
+              </Link>
             </div>
           </div>
         </motion.div>
