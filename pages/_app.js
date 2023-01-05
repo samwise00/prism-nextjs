@@ -9,7 +9,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: process.env.THEGRAPH_URL,
+  uri: "https://api.studio.thegraph.com/query/38206/prism/v0.0.5",
 });
 
 export default function App({ Component, pageProps }) {

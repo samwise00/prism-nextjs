@@ -1,9 +1,14 @@
-## Getting Started
+## Prism NFTs / Trading / Staking
 
-Welcome to my portfolio! My intention in building this is to showcase the skills I've acquired in blockchain development. I will continue adding to this site as I contionue my web3 journey.
+Hey there! Prism is one of my portfolio projects I've created on my web3 development journey. In this Dapp, users can mint NFTs, buy/sell those NFTs on the Prism trading page, and stake the NFTs in order to earn yield in the form of $PRISM tokens.
 
-Website built using:
+There are four smart contracts associate with this projects: The staking contract, the ERC20 rewards token contract, the erc721 NFT collection, and the marketplace contract. The frontend interacts with all of these contracts and displays the appropriate behavior to the user
+
+This Dapp built using:
 Next.js 13 || TailwindCSS || Framer Motion || Ethers.js
+
+Contracts With:
+Solidity || Hardhat
 
 Run locally:
 
@@ -15,10 +20,8 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+You'll need to generate an [alchemy key](https://dashboard.alchemy.com/) and set it as an environment variable.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Functioning on Goerli Testnet.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Open [http://localhost:3000](http://localhost:3000) in your browser and happy minting/trading/trading!
