@@ -25,7 +25,7 @@ export default function Trade() {
   const [myStakedNfts, setMyStakedNfts] = useState(null);
 
   const alchemySettings = {
-    apiKey: process.env.ALCHEMY_KEY,
+    apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
     network: Network.ETH_GOERLI,
   };
 
@@ -61,9 +61,12 @@ export default function Trade() {
   useEffect(() => {
     if (isWeb3Enabled) {
       const nftsForOwner = async () => {
+        console.log(`alchemy key: ${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`);
         let myNfts = await alchemy.nft.getNftsForOwner(account, {
           contractAddresses: [prismNftAddress],
         });
+
+        console.log(`myNfts: ${myNfts}`);
         setMyNfts(myNfts);
       };
       nftsForOwner().catch(console.error);
