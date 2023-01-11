@@ -47,7 +47,7 @@ const Navbar = () => (
         className={`${styles.innerWidth} mx-auto flex justify-between md:gap-16 gap-4`}
         id="navbar"
       >
-        <BaseLink href="/">
+        <BaseLink href="./">
           <h2 className="font-geo font-extrabold py-2 md:text-[30px] text-[24px] leading-[30.24px] text-white cursor-pointer">
             Prism<span className="text-pink-500">.</span>
           </h2>
@@ -55,10 +55,10 @@ const Navbar = () => (
         <div className="text-white flex flex-row">
           <div className="flex md:flex-row gap-2">
             <div className="text-white flex flex-row md:gap-6 gap-2 mt-4">
-              <BaseLink legacyBehavior href="/trade">
+              <BaseLink legacyBehavior href="./trade">
                 <h3 className="text-xs cursor-pointer">Trade</h3>
               </BaseLink>
-              <BaseLink legacyBehavior href="/stake">
+              <BaseLink legacyBehavior href="./stake">
                 <h3 className="text-xs cursor-pointer">Stake</h3>
               </BaseLink>
             </div>
