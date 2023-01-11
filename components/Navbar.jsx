@@ -28,10 +28,10 @@ const Navbar = () => (
         <div className="text-white flex flex-row">
           <div className="flex md:flex-row gap-2">
             <div className="text-white flex flex-row md:gap-6 gap-2 mt-4">
-              <Link legacyBehavior href="/trade" shallow>
+              <Link legacyBehavior href="/trade">
                 <h3 className="text-xs cursor-pointer">Trade</h3>
               </Link>
-              <Link legacyBehavior href="/stake" shallow>
+              <Link legacyBehavior href="/stake">
                 <h3 className="text-xs cursor-pointer">Stake</h3>
               </Link>
             </div>

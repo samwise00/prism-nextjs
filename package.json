@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "homepage": "./",
   "dependencies": {
     "@apollo/client": "^3.7.3",
     "@thirdweb-dev/react": "^3.6.8",
