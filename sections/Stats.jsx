@@ -89,19 +89,22 @@ const Stats = () => {
             delay={2}
           />
         )}
-        {isWeb3Enabled && chainString != "5" && (
-          <p className="text-white">
-            Please connect to &nbsp;
-            <span>
-              <button
-                onClick={() => switchNetwork("0x5")}
-                className="text-xl text-transparent bg-clip-text bg-gradient-to-br from-pink-400 to-red-600 font-bold pb-2"
-              >
-                <p>Goerli Testnet</p>
-              </button>
-            </span>
-          </p>
-        )}
+
+        <motion.div variants={fadeIn("up", "spring", 1.5, 2)}>
+          {isWeb3Enabled && chainString != "5" && (
+            <p className="text-white">
+              Please connect to &nbsp;
+              <span>
+                <button
+                  onClick={() => switchNetwork("0x5")}
+                  className="text-xl text-transparent bg-clip-text bg-gradient-to-br from-pink-400 to-red-600 font-bold pb-2"
+                >
+                  <p>Goerli Testnet</p>
+                </button>
+              </span>
+            </p>
+          )}
+        </motion.div>
 
         <motion.div
           variants={fadeIn("up", "spring", 1.5, 2)}
