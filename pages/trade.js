@@ -40,6 +40,11 @@ export default function Trade() {
     }
   }, [isWeb3Enabled, chainId]);
 
+  useEffect(() => {
+    // temporary until I implement hash routing so that it plays nice with fleek
+    window.history.pushState(null, "Trade", "/");
+  }, []);
+
   const { loading, error, data: listedNfts } = useQuery(GET_ACTIVE_ITEMS);
 
   const checkIfListed = (myNft) => {

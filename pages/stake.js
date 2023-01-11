@@ -75,6 +75,11 @@ export default function Trade() {
     setChainString(parseInt(chainId).toString());
   }, [isWeb3Enabled, chainId]);
 
+  useEffect(() => {
+    // temporary until I implement hash routing so that it plays nice with fleek
+    window.history.pushState(null, "Stake", "/");
+  }, []);
+
   return (
     <div className={`${styles.xPaddings} py-8 relative`}>
       {chainString != "5" && isWeb3Enabled ? (
