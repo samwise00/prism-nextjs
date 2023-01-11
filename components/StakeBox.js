@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useWeb3Contract, useMoralis } from "react-moralis";
 import prismStakingAbi from "../constants/PrismStaking.json";
 import nftAbi from "../constants/IpfsNft.json";
-import Image from "next/image";
 import { useNotification } from "web3uikit";
 import { ethers } from "ethers";
 
@@ -121,13 +120,9 @@ export default function StakeBox({ nftAddress, tokenId, prismStakingAddress }) {
               <div className="flex flex-col rounded-lg bg-[rgb(31,32,32)] mx-auto">
                 <div className="p-4 gap-2">
                   <div className="flex flex-row gap-4">
-                    <Image
-                      alt="pup"
-                      unoptimized={() => imageURI}
-                      priority
+                    <img
                       src={imageURI}
-                      height="200"
-                      width="200"
+                      alt="nftBox"
                       className="flex md:h-[200px] md:w-[200px] h-[150px] w-[150px] justify-start items-center mx-auto"
                     />
                     <div className="flex flex-col justify-between ">

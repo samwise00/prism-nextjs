@@ -2,3 +2,7 @@ node_modules/
 .next
 .env
 .fleek.json
+
+# next.js
+/.next/
+/out/

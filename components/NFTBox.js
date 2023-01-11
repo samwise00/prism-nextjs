@@ -3,7 +3,6 @@ import { useWeb3Contract, useMoralis } from "react-moralis";
 import prismStakingAbi from "../constants/PrismStaking.json";
 import nftMarketplaceAbi from "../constants/NftMarketplace.json";
 import nftAbi from "../constants/IpfsNft.json";
-import Image from "next/image";
 import { useNotification } from "web3uikit";
 import { ethers } from "ethers";
 import UpdateListingModal from "./UpdateListingModal";
@@ -251,14 +250,10 @@ export default function NFTBox({
                     )}
                   </div>
 
-                  <Image
-                    alt="pup"
-                    unoptimized={() => imageURI}
+                  <img
                     src={imageURI}
-                    priority
-                    height="200"
-                    width="200"
-                    className="flex justify-center items-center mx-auto pb-2"
+                    alt="nftbox"
+                    className="flex justify-center items-center mx-auto w-[200px] h-[200px] pb-2"
                   />
                   <div className="flex flex-row p-1 gap-2 justify-center">
                     {isActive ? (

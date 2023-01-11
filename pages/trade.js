@@ -21,7 +21,7 @@ export default function Trade() {
   const [myNfts, setMyNfts] = useState(null);
 
   const alchemySettings = {
-    apiKey: process.env.ALCHEMY_KEY,
+    apiKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
     network: Network.ETH_GOERLI,
   };
 
